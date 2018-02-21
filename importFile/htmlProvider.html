@@ -1,0 +1,38 @@
+<html>
+
+	<head>
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+		<script src="htmlProvider.js"></script>
+	</head>
+
+	<body>
+
+		<input type="file" id="files" name="files"/>
+		<input type="button" id="importFileBtn" value="Aktar"/>
+
+		<script type="text/javascript">
+			
+			window.onload = function() {
+
+		  		document.getElementById('importFileBtn').addEventListener("click", importExcelClick);
+
+			  	function importExcelClick() {
+			  		var file = document.getElementById('files').files[0];
+			  		if(file) {
+
+			  			var provider = new HtmlProvider();
+			  			provider.handleFile(file, function(result) {
+			  				var response = provider.getFormat(result);
+			  				console.log(response);
+			  				localStorage.setItem("soyData", JSON.stringify(response));
+			  			});
+
+			  		}		  		
+		  		};		  	
+		  	};
+
+		</script>
+
+	</body>
+	
+</html>	

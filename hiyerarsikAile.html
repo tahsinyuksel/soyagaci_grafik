@@ -1,0 +1,250 @@
+<html>
+
+	<head>
+		<link rel="stylesheet" href="vis/vis.min.css">
+		<link rel="stylesheet" href="style.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Soy Ağacı Grafik</title>
+
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>		
+		<script type="text/javascript" src="vis/vis.min.js"></script>
+		<script type="text/javascript" src="util.js"></script>
+		<script type="text/javascript" src="familyOperation.js"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+		<script src="importFile/excelProvider.js"></script>
+		<script src="importFile/htmlProvider.js"></script>		
+
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+
+		<div class="topNav">
+
+			<div class="panel">
+				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0">Dosyadan Yükle</button>
+				<button id="loadDataBtn" title="Yüklü verileri işle, çalıştır">Verileri İşle</button>
+				<button id="clearDataBtn" title="Yüklü verileri işle, çalıştır">Verileri Yok Et</button>
+				
+				<span> | </span>
+
+				<button id="exportBtn">Export</button>
+				<button id="importBtn">İmport</button>
+				<input type="text" id="portText">
+
+				<span> | </span>
+			
+				Sitil:<select id="layoutSelect">
+					<option value="0">Hiyerarşik</option>
+					<option value="1">Serbest</option>			
+				</select>
+
+				<span> | </span>
+
+				<button id="edgeRemoveBtn" title="Seçili olanı kaldır">Sil</button>
+
+				<span> | </span>
+
+				<button id="openRecordPanel" title="Yeni kayıt ekle ekranı" data-isShow="0">Kayıtlar</button>
+				<button id="openRelationPanel" title="Yeni kayıt ekle ekranı" data-isShow="0">Bağlar</button>
+				<button id="openDetailPanel" title="Detay ekranı" data-isShow="0">Bilgileri Göster</button>
+
+				<a href="about.html" title="Hakkında">Hakkında/Bilgi</a>
+
+			</div>
+
+
+		</div>
+
+		
+		<div class="panel" id="relationPanel" style="display: none">
+			<h4>Bağ - İlişki Ekle</h4>
+			İsim: <input type="text" id="edgeLabel" title="Bağda görülmesi istenilen isim">
+			Kimden(id): <input type="text" id="edgeFrom" title="Bağın kimden olacağı. Id numarası">
+			Kime (id): <input type="text" id="edgeTo" title="Bağın kime olacağı. Id numarası">
+			<button id="edgeAddBtn">Add</button>			
+		</div>
+		<br>
+
+		<div class="panel" id="recordPanel" style="display: none">
+			<h4>Yeni Kayıt Ekle</h4>
+			<form id="recordForm">
+				Cinsiyet: <input type="text" id="recordGender">
+				Bağ: <input type="text" id="recordRelation">
+				İsim: <input type="text" id="recordName">
+				<button id="newRecordBtn" type="button">Add</button>
+			</form>
+		</div>
+
+		<div class="panel" id="importFilePanel" style="display: none">
+			<h4>Dosyadan Yükle</h4>
+			
+			<input type="file" id="files" name="files"/>
+			<input type="button" id="importFileBtn" value="Aktar"/>
+			<br>
+			<p>Excel veya Kaydettiğiniz Sorgulama sayfası(html) aktarabilirsiniz.</p>
+		</div>
+
+		<div class="panel" id="detailPanel" style="display: none">
+			<b>id</b>: <span id="detail-id"></span> <br>
+			<b>Bağ</b>: <span id="detail-relation"></span> <br>
+			<b>İsim</b>: <span id="detail-name"></span> <br>
+			<b>Soyad</b>: <span id="detail-lastName"></span> <br>
+			<b>Cinsiyet</b>: <span id="detail-gender"></span> <br>
+			<b>Baba Adı</b>: <span id="detail-father"></span> <br>
+			<b>Anne Adı</b>: <span id="detail-mother"></span> <br>
+			<b>Doğum Yeri</b>: <span id="detail-birth"></span> <br>
+			<b>İl, İlçe</b>: <span id="detail-city"></span> <br>
+			<b>Cilt,Hane,Birey</b>: <span id="detail-houseNum"></span> <br>
+			<b>Medeni Durum</b>: <span id="detail-married"></span> <br>
+			<b>Durum</b>: <span id="detail-status"></span> <br>
+		</div>
+
+		<div id="visualization"></div>
+
+		<div id="mynetwork"></div>
+
+		<script src="main.js"></script>
+
+		<script type="text/javascript">
+
+			$('#exportBtn').click(function() {	
+				var result = graphCanProvider.export();		
+				if(result != '') {
+					$('#portText').val(JSON.stringify(result));	
+					alert("Metin kutusundakileri kopyalayıp bilgisayarınıza kaydedebilirsiniz. Aktarım için de yine bu metini yapıştırarak import yapılabilir.");								
+				}
+				
+			});
+
+			$('#importBtn').click(function() {
+				if( $('#portText').val() != '' ) {
+					graphCanProvider.import( JSON.parse($('#portText').val()) );	
+				} else {
+					alert("Metin kutusuna, daha önce export aldığınız metini yapıştırdıktan sonra import edebilirsiniz.");
+				}				
+			});
+
+			$('#layoutSelect').change(function() {
+				graphCanProvider.layoutMethod = ($( this ).val() == 0) ? 'directed' : '';
+				graphCanProvider.draw();
+			});
+
+			$('#edgeAddBtn').click(function() {
+				var item = {
+					id: util.makeCode(20),
+					from: $('#edgeFrom').val(),
+					to: $('#edgeTo').val(),
+					label: $('#edgeLabel').val(),
+				};
+
+				graphCanProvider.addNewEdge(item);
+			});
+
+			$('#edgeRemoveBtn').click(function() {				
+				graphCanProvider.removeCurrent();				
+
+			});
+
+			$('#newRecordBtn').click(function() {
+				var formData = {
+					id: util.createId(),
+					gender: $('#recordGender').val(),
+					relation: $('#recordRelation').val(),
+					name: $('#recordName').val(),
+				};						
+
+				console.log(formData);
+
+				graphCanProvider.addNewRecord( formData );				
+			});
+
+			$('#loadDataBtn').click(function(){
+				var result = localStorage.getItem("soyData");
+				if(result) {
+					var data = JSON.parse(result);
+					if(data.length > 0) {
+						console.log(data);
+
+						familyOperation.setData(data);
+						graphCanProvider.setData(data);
+						graphCanProvider.drawByData(graphCanProvider.getData(), familyOperation.run());	
+					} else {
+						alert("Yüklenmiş veri bulunamadı");
+					}					
+				}
+			});
+
+			$('#clearDataBtn').click(function() {
+				localStorage.removeItem("soyData");
+			});
+
+			$('#openRecordPanel').click(function() {
+				panelButtonClick(this, '#recordPanel');								
+			});
+
+			$('#openRelationPanel').click(function() {
+				panelButtonClick(this, '#relationPanel');								
+			});
+
+			$('#openImportFilePanel').click(function() {
+				panelButtonClick(this, '#importFilePanel');								
+			});			
+
+			$('#openDetailPanel').click(function() {
+				panelButtonClick(this, '#detailPanel');								
+			});		
+
+			$('#importFileBtn').click(function(){				
+				var file = document.getElementById('files').files[0];
+
+					if(file) {		 
+
+						var provider = getProvider(file); 	
+						if(provider != null) {
+							provider.handleFile(file, function(result) {
+			  				var response = provider.getFormat(result);
+			  				console.log(response);
+			  				localStorage.setItem("soyData", JSON.stringify(response));
+			  				alert("Veriler aktarıldı. Şimdi 'Verileri İşle' ile işlemi başlatabilirsiniz.");
+			  			});
+						}		
+					}	
+			});
+
+			function panelButtonClick(btn, panel) {
+				if( $(btn).attr('isShow') == 1) {
+					$(panel).hide();
+					$(btn).attr('isShow', 0);
+				} else {
+					$(panel).show();
+					$(btn).attr('isShow', 1);
+				}
+			}
+
+			function getProvider(file) {
+				var ext = file.name.split('.').pop();
+				if(ext == 'xlsx' || ext == 'xls') {
+					console.log('excel');
+					return new ExcelProvider();
+				}
+
+				if(ext == 'html') {
+					console.log('html');
+					return new HtmlProvider();
+				}
+
+				return null;
+			}
+
+			var familyOperation = new familyOperation();			
+			var graphCanProvider = new graphCan();			
+						
+		</script>
+				
+	</body>
+
+</html>
