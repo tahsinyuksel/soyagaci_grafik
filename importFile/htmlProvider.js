@@ -48,6 +48,10 @@ var HtmlProvider = function() {
 			
 		});
 
+		if(result.length > 2) {
+			return result.slice(0, result.length - 2);
+		}
+
 		return result;
 	}
 
