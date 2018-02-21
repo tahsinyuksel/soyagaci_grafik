@@ -28,7 +28,7 @@
 
 		  gtag('config', 'UA-53855075-1');
 		</script>
-		
+
 	</head>
 
 	<body>
@@ -37,9 +37,10 @@
 
 			<div class="panel">
 				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0">Dosyadan Yükle</button>
-				<button id="loadDataBtn" title="Yüklü verileri işle, çalıştır">Verileri İşle</button>
+				<!--
+				<button id="loadDataBtn" title="Yüklü verileri işle, çalıştır" style="background-color: #94c4ec;">Verileri İşle</button>
 				<button id="clearDataBtn" title="Yüklü verileri işle, çalıştır">Verileri Yok Et</button>
-				
+				-->
 				<span> | </span>
 
 				<button id="exportBtn">Export</button>
@@ -189,6 +190,8 @@
 					} else {
 						alert("Yüklenmiş veri bulunamadı");
 					}					
+				} else {
+					alert("Öncelikle dosyadan verilerin yüklenmesi gerekiyor.");
 				}
 			});
 
@@ -220,11 +223,12 @@
 						var provider = getProvider(file); 	
 						if(provider != null) {
 							provider.handleFile(file, function(result) {
-			  				var response = provider.getFormat(result);
+								var response = provider.getFormat(result);
 
-			  				localStorage.setItem("soyData", JSON.stringify(response));
-			  				alert("Veriler aktarıldı. Şimdi 'Verileri İşle' ile işlemi başlatabilirsiniz.");
-			  			});
+								familyOperation.setData(response);
+								graphCanProvider.setData(response);
+								graphCanProvider.drawByData(graphCanProvider.getData(), familyOperation.run());	
+							});
 						}		
 					}	
 			});
@@ -246,7 +250,7 @@
 					return new ExcelProvider();
 				}
 
-				if(ext == 'html') {
+				if(ext == 'htm' || ext == 'html') {
 					console.log('html');
 					return new HtmlProvider();
 				}
