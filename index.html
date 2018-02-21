@@ -156,9 +156,9 @@
 			$('#edgeAddBtn').click(function() {
 				var item = {
 					id: util.makeCode(20),
-					from: $('#edgeFrom').val(),
-					to: $('#edgeTo').val(),
-					label: $('#edgeLabel').val(),
+					from: $('#edgeFrom').val().trim(),
+					to: $('#edgeTo').val().trim(),
+					label: $('#edgeLabel').val().trim(),
 				};
 
 				graphCanProvider.addNewEdge(item);
@@ -172,9 +172,9 @@
 			$('#newRecordBtn').click(function() {
 				var formData = {
 					id: util.createId(),
-					gender: $('#recordGender').val(),
-					relation: $('#recordRelation').val(),
-					name: $('#recordName').val(),
+					gender: $('#recordGender').val().trim(),
+					relation: $('#recordRelation').val().trim(),
+					name: $('#recordName').val().trim(),
 				};						
 
 				console.log(formData);
