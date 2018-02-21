@@ -161,14 +161,22 @@ var graphCan = function() {
   	}
 
   	this.addNewRecord = function(item) {
-  		this.data.push(item);
-  		this.nodes.add(this.getNodeItem(item));
-  		graphCanProvider.draw();
+		if(this.nodes.length > 0) {
+			this.data.push(item);
+			this.nodes.add(this.getNodeItem(item));
+			graphCanProvider.draw();
+		} else {
+			alert("Öncelikle veriler yüklenmelidir");
+		}  		
   	}		      	
 
   	this.addNewEdge = function(item) {
-  		graphCanProvider.edges.add(item);
-		graphCanProvider.draw();
+		if(this.edges.length > 0) {
+			graphCanProvider.edges.add(item);
+			graphCanProvider.draw();
+		} else {
+			alert("Öncelikle veriler yüklenmelidir");
+		}  	
   	}
 
   	this.removeCurrent = function() {
