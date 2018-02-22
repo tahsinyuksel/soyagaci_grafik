@@ -40,16 +40,16 @@
 		<div class="topNav">			
 
 			<div class="panel">
-				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0">Dosyadan Yükle</button>
+				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0" class="button default">Verileri Yükle</button>
 				<!--
 				<button id="loadDataBtn" title="Yüklü verileri işle, çalıştır" style="background-color: #94c4ec;">Verileri İşle</button>
 				<button id="clearDataBtn" title="Yüklü verileri işle, çalıştır">Verileri Yok Et</button>
 				-->
 				<span> | </span>
 
-				<button id="exportBtn">Export</button>
-				<button id="importBtn">İmport</button>
-				<input type="text" id="portText">
+				<button id="exportBtn" class="button default">Export</button>
+				<button id="importBtn" class="button default">İmport</button>
+				<textarea id="portText"></textarea>
 
 				<span> | </span>
 			
@@ -60,13 +60,13 @@
 
 				<span> | </span>
 
-				<button id="edgeRemoveBtn" title="Seçili olanı kaldır">Sil</button>
+				<button id="edgeRemoveBtn" title="Seçili olanı kaldır" class="button default">Sil</button>
 
 				<span> | </span>
 
-				<button id="openRecordPanel" title="Yeni kayıt ekle ekranı" data-isShow="0">Kayıtlar</button>
-				<button id="openRelationPanel" title="Yeni kayıt ekle ekranı" data-isShow="0">Bağlar</button>
-				<button id="openDetailPanel" title="Detay ekranı" data-isShow="0">Bilgileri Göster</button>
+				<button id="openRecordPanel" title="Yeni kayıt ekle ekranı" data-isShow="0" class="button default">Kayıtlar</button>
+				<button id="openRelationPanel" title="Yeni kayıt ekle ekranı" data-isShow="0" class="button default">Bağlar</button>
+				<button id="openDetailPanel" title="Detay ekranı" data-isShow="0" class="button default">Detayları Göster</button>
 
 				<a href="about.html" title="Hakkında">Hakkında/Bilgi</a>
 
@@ -96,7 +96,12 @@
 		<div class="panel" id="recordPanel" style="display: none">
 			<h4>Yeni Kayıt Ekle</h4>
 			<form id="recordForm">
-				Cinsiyet: <input type="text" id="recordGender">
+				Cinsiyet: 
+				<select id="recordGender">
+					<option value=""> </option>
+					<option value="E">Erkek</option>
+					<option value="K">Kız</option>
+				</select>
 				Bağ: <input type="text" id="recordRelation">
 				İsim: <input type="text" id="recordName">
 				<button id="newRecordBtn" type="button">Add</button>
@@ -104,20 +109,22 @@
 		</div>
 
 		<div class="panel" id="importFilePanel" style="display: none">
-			<h4>Sorgulama sayfasındaki tabloyu seçip kopyaladıktan sonra buraya yapıştırın</h4>
+			<h4>Tabloyu Kopyala Yapıştır</h4>
 			<div id="pasteDataInput" contenteditable="true"></div>
+			<br>
+			<p>Sorgulama sayfasındaki tabloyu seçip kopyaladıktan sonra buraya yapıştırın</p>
 
 			<br>
-			<input type="button" id="importPasteBtn" value="Aktar"/>
+			<input type="button" id="importPasteBtn" value="Aktar" class="button default"/>
 
 			<hr>
 
 			<h4>Dosyadan Yükle</h4>
 			
-			<input type="file" id="files" name="files"/>
-			<input type="button" id="importFileBtn" value="Aktar"/>
+			<input type="file" id="files" name="files"/>			
 			<br>
 			<p>Excel veya Kaydettiğiniz Sorgulama sayfası(html) aktarabilirsiniz.</p>
+			<input type="button" id="importFileBtn" value="Aktar" class="button default"/>
 		</div>
 
 		<div class="panel" id="detailPanel" style="display: none">
