@@ -44,9 +44,20 @@ var graphCan = function() {
   	},
 
   	this.getNodeItem = function(item) {
+      var label = item.name + ((item.lastName) ? ' ' + item.lastName : '');
+      var subLabel = '';
+
+      if(item.birth && item.birth.indexOf("/") != -1) {
+        subLabel += item.birth.split('/').pop() + '-';
+      }
+
+      if(item.status && item.status.indexOf("/") != -1) {
+        subLabel += item.status.split('/').pop();
+      }
+
   		var result = {
   			id: item.id, 
-  			label: item.name + ((item.lastName) ? ' ' + item.lastName : ''), 
+  			label: label + '\n' + subLabel, 
   			color: { background: (item.gender == 'E' ? '' : 'pink' ) }
   		};
   		
