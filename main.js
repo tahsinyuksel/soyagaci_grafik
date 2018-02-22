@@ -135,7 +135,10 @@ var graphCan = function() {
   	}
 
   	this.export = function() {
-  		return { edges: Object.values(this.edges._data), nodes: Object.values(this.nodes._data), data: this.getData() };							      		
+      if(this.edges.length > 0 && this.nodes.length > 0) {
+        return { edges: Object.values(this.edges._data), nodes: Object.values(this.nodes._data), data: this.getData() };                          
+      }
+  		return '';
   	}
 
   	this.import = function(importData) {
