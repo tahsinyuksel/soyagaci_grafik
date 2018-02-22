@@ -65,7 +65,7 @@
 		<div class="topNav">			
 
 			<div class="panel">
-				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0" class="button default">Verileri Yükle</button>
+				<button id="openImportFilePanel" title="Dosyadan verileri yükle" is-show="0" class="button default">Verileri Yükle</button>
 				<!--
 				<button id="loadDataBtn" title="Yüklü verileri işle, çalıştır" style="background-color: #94c4ec;">Verileri İşle</button>
 				<button id="clearDataBtn" title="Yüklü verileri işle, çalıştır">Verileri Yok Et</button>
@@ -89,9 +89,9 @@
 
 				<span> | </span>
 
-				<button id="openRecordPanel" title="Yeni kayıt ekle ekranı" data-isShow="0" class="button default">Kayıtlar</button>
-				<button id="openRelationPanel" title="Yeni kayıt ekle ekranı" data-isShow="0" class="button default">Bağlar</button>
-				<button id="openDetailPanel" title="Detay ekranı" data-isShow="0" class="button default">Detayları Göster</button>
+				<button id="openRecordPanel" title="Yeni kayıt ekle ekranı" is-show="0" class="button default">Kayıtlar</button>
+				<button id="openRelationPanel" title="Yeni kayıt ekle ekranı" is-show="0" class="button default">Bağlar</button>
+				<button id="openDetailPanel" title="Detay ekranı" is-show="0" class="button default">Detayları Göster</button>
 
 				<a href="about.html" title="Hakkında">Hakkında/Bilgi</a>
 
@@ -283,6 +283,9 @@
 								graphCanProvider.setData(response);
 								graphCanProvider.drawByData(graphCanProvider.getData(), familyOperation.run());	
 							});
+
+							$('#openImportFilePanel').attr('is-show', 1);
+							$('#openImportFilePanel').click();
 						}		
 					}	
 			});
@@ -298,15 +301,18 @@
 					graphCanProvider.setData(response);
 					graphCanProvider.drawByData(graphCanProvider.getData(), familyOperation.run());	
 				});
+
+				$('#openImportFilePanel').attr('is-show', 1);
+				$('#openImportFilePanel').click();
 			});
 
 			function panelButtonClick(btn, panel) {
-				if( $(btn).attr('isShow') == 1) {
+				if( $(btn).attr('is-show') == 1) {
 					$(panel).hide();
-					$(btn).attr('isShow', 0);
+					$(btn).attr('is-show', 0);
 				} else {
 					$(panel).show();
-					$(btn).attr('isShow', 1);
+					$(btn).attr('is-show', 1);
 				}
 			}
 
