@@ -17,6 +17,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
 		<script src="importFile/excelProvider.js"></script>
 		<script src="importFile/htmlProvider.js"></script>		
+		<script src="importFile/InputProvider.js"></script>		
 
 		<style type="text/css">
 
@@ -36,7 +37,7 @@
 
 	<body>
 
-		<div class="topNav">
+		<div class="topNav">			
 
 			<div class="panel">
 				<button id="openImportFilePanel" title="Dosyadan verileri yükle" data-isShow="0">Dosyadan Yükle</button>
@@ -103,6 +104,14 @@
 		</div>
 
 		<div class="panel" id="importFilePanel" style="display: none">
+			<h4>Sorgulama sayfasındaki tabloyu seçip kopyaladıktan sonra buraya yapıştırın</h4>
+			<div id="pasteDataInput" contenteditable="true"></div>
+
+			<br>
+			<input type="button" id="importPasteBtn" value="Aktar"/>
+
+			<hr>
+
 			<h4>Dosyadan Yükle</h4>
 			
 			<input type="file" id="files" name="files"/>
@@ -238,6 +247,19 @@
 							});
 						}		
 					}	
+			});
+
+			$('#importPasteBtn').click(function() {
+				var pasteVal = $('#pasteDataInput').html();
+
+				var provider = new InputProvider(); 	
+				provider.handleFile(pasteVal, function(result) {
+					var response = provider.getFormat(result);
+
+					familyOperation.setData(response);
+					graphCanProvider.setData(response);
+					graphCanProvider.drawByData(graphCanProvider.getData(), familyOperation.run());	
+				});
 			});
 
 			function panelButtonClick(btn, panel) {
