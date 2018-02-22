@@ -2,8 +2,8 @@ var graphCan = function() {
 	this.network = null;
 	this.layoutMethod = "directed";
 	this.isEdit = false;
-	this.nodes = [];
-	this.edges = [];
+	this.nodes = new vis.DataSet();
+	this.edges = new vis.DataSet();
 	this.data = [];
 	this.currentNodeEdge = {};
 
@@ -90,7 +90,7 @@ var graphCan = function() {
 
       // is can edit
       options.manipulation = {
-		enabled: this.isEdit
+		    enabled: this.isEdit
 	  }
 
       this.network = new vis.Network(container, data, options);
@@ -164,22 +164,18 @@ var graphCan = function() {
   	}
 
   	this.addNewRecord = function(item) {
-		if(this.nodes.length > 0) {
-			this.data.push(item);
-			this.nodes.add(this.getNodeItem(item));
-			graphCanProvider.draw();
-		} else {
-			alert("Öncelikle veriler yüklenmelidir");
-		}  		
+		  this.data.push(item);
+      this.nodes.add(this.getNodeItem(item));
+      graphCanProvider.draw();
   	}		      	
 
   	this.addNewEdge = function(item) {
-		if(this.edges.length > 0) {
-			graphCanProvider.edges.add(item);
-			graphCanProvider.draw();
-		} else {
-			alert("Öncelikle veriler yüklenmelidir");
-		}  	
+  		if(this.nodes.length > 0) {
+  			graphCanProvider.edges.add(item);
+  			graphCanProvider.draw();
+  		} else {
+  			alert("Öncelikle veriler yüklenmelidir");
+  		}  	
   	}
 
   	this.removeCurrent = function() {
