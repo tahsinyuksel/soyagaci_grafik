@@ -35,6 +35,11 @@ body {
   top: 10px;
 }
 
+.socialBlock {  
+  float: right;
+  padding: 5px;
+}
+
 .button {
   display: inline-block;
   background-color: #f5f5f5;
